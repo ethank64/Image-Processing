@@ -4,22 +4,18 @@ let colorArray;
 let afterImage;
 
 function preload() {
-  img = loadImage("./pic.jpeg", img => {
-    if (img.width % 2 != 0) {
-      img.width++;
-    } else if (img.height % 2 != 0) {
-      img.height++;
-    }
-  });
+  img = loadImage("./pic.jpeg");
 }
 
 function setup() {
-  createCanvas(img.width * 2, img.height);
+  pixelDensity(1);
   
-  image(img, 0, 0, width / 2, height);
+  const cnv = createCanvas(window.innerWidth, window.innerHeight);
   
-  colorArray = make2dArray(width / 2, height);
-  afterImage = new AfterImage(colorArray, width / 2, 0);
+  image(img, 0, 0);
+  
+  colorArray = make2dArray(img.width, img.height);
+  afterImage = new AfterImage(colorArray, img.width, 0, img.width, img.height);
   afterImage.fillArray();
   afterImage.pixelate(4);
   //afterImage.blackAndWhite(false);
@@ -27,8 +23,8 @@ function setup() {
 }
 
 function draw() {
-  background(220);
-  image(img, 0, 0, width / 2, height);
+  background(255);
+  image(img, 0, 0, img.width, img.height);
   afterImage.render();
 }
 
