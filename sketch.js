@@ -7,24 +7,20 @@ function preload() {
   img = loadImage("./pic.jpeg");
 }
 
-function setup() {
-  pixelDensity(1);
-  
+function setup() {  
   const cnv = createCanvas(window.innerWidth, window.innerHeight);
   
   image(img, 0, 0);
   
+  let ppp = floor(img.width / 8);
+  
   colorArray = make2dArray(img.width, img.height);
   afterImage = new AfterImage(colorArray, img.width, 0, img.width, img.height);
-  afterImage.fillArray();
-  afterImage.pixelate(4);
+  afterImage.copyImage();
   //afterImage.blackAndWhite(false);
   //afterImage.makeCutLines();
-}
-
-function draw() {
-  background(255);
-  image(img, 0, 0, img.width, img.height);
+  afterImage.pixelate(ppp);
+  
   afterImage.render();
 }
 
