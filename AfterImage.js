@@ -16,7 +16,7 @@ class AfterImage {
     }
   }
 
-  fillArray() {
+  copyImage() {
     for (let i = 0; i < this.w; i++) {
       for (let j = 0; j < this.h; j++) {
         this.pixels[i][j] = canvas.getContext('2d').getImageData(i, j, 1, 1).data;
@@ -24,15 +24,15 @@ class AfterImage {
     }
   }
 
-  pixelate(res) {
+  pixelate(ppp) {
     let avg = [0, 0, 0];
     let last = false;
-    let remainder = createVector(this.w % res, this.h % res);
+    let remainder = createVector(this.w % ppp, this.h % ppp);
 
-    for (let xoff = 0; xoff < this.w / res; xoff++) {
-      for (let yoff = 0; yoff < this.h / res; yoff++) {
-        for (let i = res * xoff; i < res + res * xoff; i++) {
-          for (let j = res * yoff; j < res + res * yoff; j++) {
+    for (let xoff = 0; xoff < this.w / ppp; xoff++) {
+      for (let yoff = 0; yoff < this.h / ppp; yoff++) {
+        for (let i = ppp * xoff; i < ppp + ppp * xoff; i++) {
+          for (let j = ppp * yoff; j < ppp + ppp * yoff; j++) {
             if (j < this.h && i < this.w) {
               avg[0] += this.pixels[i][j][0];
               avg[1] += this.pixels[i][j][1];
@@ -50,14 +50,14 @@ class AfterImage {
           avg[1] /= (remainder.x * remainder.y);
           avg[2] /= (remainder.x * remainder.y);
         } else {
-          avg[0] /= (res * res);
-          avg[1] /= (res * res);
-          avg[2] /= (res * res);
+          avg[0] /= (ppp * ppp);
+          avg[1] /= (ppp * ppp);
+          avg[2] /= (ppp * ppp);
         }
 
 
-        for (let i = res * xoff; i < res + res * xoff; i++) {
-          for (let j = res * yoff; j < res + res * yoff; j++) {
+        for (let i = ppp * xoff; i < ppp + ppp * xoff; i++) {
+          for (let j = ppp * yoff; j < ppp + ppp * yoff; j++) {
             if (j < this.h && i < this.w) {
               this.pixels[i][j][0] = avg[0];
               this.pixels[i][j][1] = avg[1];
