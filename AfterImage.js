@@ -23,6 +23,91 @@ class AfterImage {
       }
     }
   }
+  
+  roundColors(place) {
+    for (let i = 0; i < this.w; i++) {
+      for (let j = 0; j < this.h; j++) {
+        let pixel = this.pixels[i][j];
+        
+        let newR = tenPowNRound(pixel[0], place);
+        let newG = tenPowNRound(pixel[1], place);
+        let newB = tenPowNRound(pixel[2], place);
+        
+        this.pixels[i][j][0] = newR;
+        this.pixels[i][j][1] = newG;
+        this.pixels[i][j][2] = newB;
+      }
+    }
+  }
+  
+  invertColors() {
+    for (let i = 0; i < this.w; i++) {
+      for (let j = 0; j < this.h; j++) {
+        let pixel = this.pixels[i][j];
+        
+        let newR = 255 - pixel[0];
+        let newG = 255 - pixel[1];
+        let newB = 255 - pixel[2];
+        
+        this.pixels[i][j][0] = newR;
+        this.pixels[i][j][1] = newG;
+        this.pixels[i][j][2] = newB;
+      }
+    }
+  }
+  
+  flip() {
+    for (let i = 0; i < this.w / 2; i++) {
+      for (let j = 0; j < this.h; j++) {
+        let newX = this.w - 1 - i;
+        
+        let ogPixel = this.pixels[i][j];
+        let newPixel = this.pixels[newX][j];
+        
+        this.pixels[i][j] = newPixel;
+        this.pixels[newX][j] = ogPixel;
+      }
+    }
+  }
+  
+  scramble(rounds) {
+    for (let r = 0; r < rounds; r++) {
+      let i1 = floor(random(this.w));
+      let j1 = floor(random(this.h));
+      let pixel1 = this.pixels[i1][j1];
+
+      let i2 = floor(random(this.w));
+      let j2 = floor(random(this.h));
+      let pixel2 = this.pixels[i2][j2];
+
+      this.pixels[i1][j1] = pixel2;
+      this.pixels[i2][j2] = pixel1;
+    }
+  }
+  
+  rainbowStatic(min, max) {
+    for (let i = 0; i < this.w; i++) {
+      for (let j = 0; j < this.h; j++) {
+        for (let col = 0; col < 3; col++) {
+          this.pixels[i][j][col] += round(random(min, max));
+        }
+      }
+    }
+  }
+  
+  onlyMainColors(threshold) {
+    for (let i = 0; i < this.w; i++) {
+      for (let j = 0; j < this.h; j++) {
+        for (let col = 0; col < 3; col++) {
+          if (this.pixels[i][j][col] > threshold) {
+            this.pixels[i][j][col] = 255;
+          } else {
+            this.pixels[i][j][col] = 0;
+          }
+        }
+      }
+    }
+  }
 
   pixelate(ppp) {
     let avg = [0, 0, 0];
@@ -71,6 +156,22 @@ class AfterImage {
         avg[0] = 0;
         avg[1] = 0;
         avg[2] = 0;
+      }
+    }
+  }
+  
+  grayScale() {
+    for (let i = 0; i < this.w; i++) {
+      for (let j = 0; j < this.h; j++) {
+        let r = this.pixels[i][j][0];
+        let g = this.pixels[i][j][1];
+        let b = this.pixels[i][j][2];
+        
+        let avg = (r + g + b) / 3;
+        
+        this.pixels[i][j][0] = avg;
+        this.pixels[i][j][1] = avg;
+        this.pixels[i][j][2] = avg;
       }
     }
   }
@@ -127,4 +228,9 @@ class AfterImage {
       }
     }
   }
+}
+
+// Return a number rounded to tens, hundredth, etc
+function tenPowNRound(num, n) {
+  return round(num / Math.pow(10, n)) * Math.pow(10, n);
 }
