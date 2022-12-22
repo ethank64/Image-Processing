@@ -4,7 +4,7 @@ let colorArray;
 let afterImage;
 
 function preload() {
-  img = loadImage("./pic.jpeg");
+  img = loadImage("assets/pic.jpeg");
 }
 
 function setup() {  
