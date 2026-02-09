@@ -142,6 +142,9 @@ function applyCurrentEffect() {
     case 'cutLines':
       afterImage.makeCutLines();
       break;
+    case 'remapColors':
+      afterImage.remapDistinctColors();
+      break;
     case 'invert':
     default:
       afterImage.invertColors();
