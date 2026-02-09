@@ -124,6 +124,15 @@ function applyCurrentEffect() {
     case 'rainbow':
       afterImage.rainbowStatic(0, 100);
       break;
+    case 'averageDiff':
+      afterImage.averageDifferential(2);
+      break;
+    case 'brightOnly':
+      afterImage.onlyShowBright(180);
+      break;
+    case 'overlayWarm':
+      afterImage.colorOverlay([40, 0, 80]);
+      break;
     case 'mainColors':
       afterImage.onlyMainColors(70);
       break;
