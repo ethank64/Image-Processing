@@ -4,8 +4,15 @@ let afterImage;
 let currentEffect = 'invert';
 let canvasOrigin = { x: 0, y: 0, w: 0, h: 0 };
 
+function getCanvasSize() {
+  const wrapper = document.querySelector('.canvas-wrapper');
+  if (!wrapper) return { w: window.innerWidth, h: window.innerHeight };
+  return { w: wrapper.clientWidth, h: wrapper.clientHeight };
+}
+
 function setup() {
-  const cnv = createCanvas(window.innerWidth, window.innerHeight);
+  const { w, h } = getCanvasSize();
+  const cnv = createCanvas(w, h);
   cnv.parent(document.querySelector('.canvas-wrapper'));
   pixelDensity(1);
 
@@ -39,7 +46,8 @@ function setup() {
 }
 
 function windowResized() {
-  resizeCanvas(window.innerWidth, window.innerHeight);
+  const { w, h } = getCanvasSize();
+  resizeCanvas(w, h);
   if (img) {
     initializeFromImage();
   }
@@ -66,10 +74,16 @@ function initializeFromImage() {
 }
 
 function applyCurrentEffect() {
-  if (!afterImage) return;
+  if (!img || !afterImage) return;
 
   // Reset from original image before applying the selected effect
   image(img, canvasOrigin.x, canvasOrigin.y, canvasOrigin.w, canvasOrigin.h);
+
+  if (currentEffect === 'original') {
+    // Just show the original, no processing
+    return;
+  }
+
   afterImage.copyImage();
 
   const ppp = Math.max(1, Math.floor(canvasOrigin.w / 32));

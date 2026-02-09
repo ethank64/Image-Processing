@@ -173,8 +173,6 @@ input[type="file"]::-webkit-file-upload-button {
 
 canvas {
   display: block;
-  width: 100% !important;
-  height: 100% !important;
 }
 
 @media (max-width: 768px) {
