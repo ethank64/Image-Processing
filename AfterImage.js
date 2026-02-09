@@ -232,6 +232,30 @@ class AfterImage {
       }
     }
   }
+
+  // Map each distinct RGB color in the image to a new random color
+  remapDistinctColors() {
+    const map = new Map();
+
+    for (let i = 0; i < this.w; i++) {
+      for (let j = 0; j < this.h; j++) {
+        const pixel = this.pixels[i][j];
+        const key = `${pixel[0]},${pixel[1]},${pixel[2]}`;
+
+        if (!map.has(key)) {
+          const r = floor(random(256));
+          const g = floor(random(256));
+          const b = floor(random(256));
+          map.set(key, [r, g, b]);
+        }
+
+        const [r, g, b] = map.get(key);
+        this.pixels[i][j][0] = r;
+        this.pixels[i][j][1] = g;
+        this.pixels[i][j][2] = b;
+      }
+    }
+  }
 }
 
 // Return a number rounded to tens, hundredth, etc
