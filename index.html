@@ -72,9 +72,19 @@
         window.setEffect(event.target.value);
       });
 
-      applyButton.addEventListener('click', () => {
+      applyButton.addEventListener('click', async () => {
         if (!window.applyEffect) return;
-        window.applyEffect();
+        applyButton.disabled = true;
+        applyButton.classList.add('is-loading');
+        const originalText = applyButton.textContent;
+        applyButton.textContent = 'Processing...';
+        try {
+          await window.applyEffect();
+        } finally {
+          applyButton.disabled = false;
+          applyButton.classList.remove('is-loading');
+          applyButton.textContent = originalText;
+        }
       });
     </script>
   </body>

@@ -147,6 +147,20 @@ input[type="file"]::-webkit-file-upload-button {
   box-shadow: 0 10px 28px rgba(37, 99, 235, 0.6);
 }
 
+.primary-btn.is-loading {
+  opacity: 0.8;
+  cursor: default;
+}
+
+.primary-btn.is-loading::after {
+  animation: shimmer 1.2s infinite linear;
+}
+
+@keyframes shimmer {
+  0% { transform: translate3d(-30%, -30%, 0); }
+  100% { transform: translate3d(30%, 30%, 0); }
+}
+
 .canvas-wrapper {
   flex: 1;
   position: relative;
