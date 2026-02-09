@@ -38,7 +38,8 @@ function setup() {
   window.loadUserImage = (dataUrl) => {
     loadImage(dataUrl, (loaded) => {
       img = loaded;
-      resizeCanvas(window.innerWidth, window.innerHeight);
+      const { w, h } = getCanvasSize();
+      resizeCanvas(w, h);
       setPlaceholderVisible(false);
       initializeFromImage();
     });
@@ -69,8 +70,6 @@ function initializeFromImage() {
   colorArray = make2dArray(displayW, displayH);
   afterImage = new AfterImage(colorArray, x, y, displayW, displayH);
   afterImage.copyImage();
-
-  applyCurrentEffect();
 }
 
 function applyCurrentEffect() {
