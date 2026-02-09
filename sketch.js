@@ -20,10 +20,19 @@ function setup() {
     applyCurrentEffect();
   };
 
+  const placeholder = document.querySelector('.canvas-placeholder');
+  const setPlaceholderVisible = (visible) => {
+    if (!placeholder) return;
+    placeholder.style.opacity = visible ? '1' : '0';
+  };
+
+  setPlaceholderVisible(true);
+
   window.loadUserImage = (dataUrl) => {
     loadImage(dataUrl, (loaded) => {
       img = loaded;
       resizeCanvas(window.innerWidth, window.innerHeight);
+      setPlaceholderVisible(false);
       initializeFromImage();
     });
   };
@@ -106,15 +115,7 @@ function applyCurrentEffect() {
 }
 
 function draw() {
-  if (!img) {
-    push();
-    noStroke();
-    fill(148, 163, 184);
-    textAlign(CENTER, CENTER);
-    textSize(16);
-    text('Upload an image to begin experimenting with effects.', width / 2, height / 2);
-    pop();
-  }
+  // Rendering handled via canvas + HTML placeholder; no per-frame drawing needed.
 }
 
 const make2dArray = (rows, cols) => {
