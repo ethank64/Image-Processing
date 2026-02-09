@@ -9,7 +9,71 @@
     <meta author="Ethan Knotts"/>
   </head>
   <body>
+    <div class="app-shell">
+      <header class="app-header">
+        <h1>Image Processing Playground</h1>
+        <p>Upload an image, choose an effect, and generate a transformed version in real time.</p>
+      </header>
+
+      <section class="controls-panel">
+        <div class="control-group">
+          <label for="image-upload">Upload Image</label>
+          <input type="file" id="image-upload" accept="image/*" />
+        </div>
+
+        <div class="control-group">
+          <label for="effect-select">Effect</label>
+          <select id="effect-select">
+            <option value="invert">Invert Colors</option>
+            <option value="round">Posterize (Rounded Colors)</option>
+            <option value="flip">Mirror Flip</option>
+            <option value="scramble">Scramble Pixels</option>
+            <option value="rainbow">Rainbow Static</option>
+            <option value="mainColors">Main Colors Only</option>
+            <option value="grayscale">Grayscale</option>
+            <option value="bw">Black &amp; White</option>
+            <option value="bwInverse">Black &amp; White (Inverted)</option>
+            <option value="pixelate">Pixelate</option>
+            <option value="cutLines">Edge / Cut Lines</option>
+          </select>
+        </div>
+
+        <button id="apply-effect" class="primary-btn">Apply Effect</button>
+      </section>
+
+      <main class="canvas-wrapper">
+        <!-- p5 canvas is injected here -->
+      </main>
+    </div>
+
     <script src="AfterImage.js"></script>
     <script src="sketch.js"></script>
+    <script>
+      const uploadInput = document.getElementById('image-upload');
+      const effectSelect = document.getElementById('effect-select');
+      const applyButton = document.getElementById('apply-effect');
+
+      uploadInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (!file || !window.loadUserImage) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const dataUrl = e.target.result;
+          window.loadUserImage(dataUrl);
+        };
+        reader.readAsDataURL(file);
+      });
+
+      effectSelect.addEventListener('change', (event) => {
+        if (!window.setEffect) return;
+        window.setEffect(event.target.value);
+      });
+
+      applyButton.addEventListener('click', () => {
+        if (!window.applyEffect) return;
+        window.applyEffect();
+      });
+    </script>
   </body>
 </html>
