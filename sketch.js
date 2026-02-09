@@ -2,7 +2,8 @@ let img = null;
 let colorArray;
 let afterImage;
 let currentEffect = 'invert';
-let canvasOrigin = { x: 0, y: 0, w: 0, h: 0 };
+let originalRect = { x: 0, y: 0, w: 0, h: 0 };
+let processedRect = { x: 0, y: 0, w: 0, h: 0 };
 
 function getCanvasSize() {
   const wrapper = document.querySelector('.canvas-wrapper');
@@ -57,35 +58,50 @@ function windowResized() {
 function initializeFromImage() {
   background(0);
 
-  const scale = Math.min(width / img.width, height / img.height, 1);
+  // We want original on the left, processed on the right, same size
+  const halfWidth = width / 2;
+  const scale = Math.min(halfWidth / img.width, height / img.height, 1);
   const displayW = Math.floor(img.width * scale);
   const displayH = Math.floor(img.height * scale);
-  const x = Math.floor((width - displayW) / 2);
+
+  const originalX = Math.floor((halfWidth - displayW) / 2);
   const y = Math.floor((height - displayH) / 2);
+  const processedX = Math.floor(halfWidth + (halfWidth - displayW) / 2);
 
-  canvasOrigin = { x, y, w: displayW, h: displayH };
+  originalRect = { x: originalX, y, w: displayW, h: displayH };
+  processedRect = { x: processedX, y, w: displayW, h: displayH };
 
-  image(img, x, y, displayW, displayH);
+  // Draw original on the left
+  image(img, originalRect.x, originalRect.y, originalRect.w, originalRect.h);
 
+  // Prepare AfterImage to render into the right half
   colorArray = make2dArray(displayW, displayH);
-  afterImage = new AfterImage(colorArray, x, y, displayW, displayH);
+  afterImage = new AfterImage(colorArray, processedRect.x, processedRect.y, displayW, displayH);
   afterImage.copyImage();
 }
 
 function applyCurrentEffect() {
   if (!img || !afterImage) return;
 
-  // Reset from original image before applying the selected effect
-  image(img, canvasOrigin.x, canvasOrigin.y, canvasOrigin.w, canvasOrigin.h);
+  // Always redraw the original on the left
+  image(img, originalRect.x, originalRect.y, originalRect.w, originalRect.h);
+
+  // Clear the processed area
+  push();
+  noStroke();
+  fill(0);
+  rect(processedRect.x, processedRect.y, processedRect.w, processedRect.h);
+  pop();
 
   if (currentEffect === 'original') {
-    // Just show the original, no processing
+    // No processed version, just show original
     return;
   }
 
+  // Copy the pixels from the processed region before applying effects
   afterImage.copyImage();
 
-  const ppp = Math.max(1, Math.floor(canvasOrigin.w / 32));
+  const ppp = Math.max(1, Math.floor(processedRect.w / 32));
 
   switch (currentEffect) {
     case 'round':
