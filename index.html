@@ -68,9 +68,8 @@
       });
 
       effectSelect.addEventListener('change', (event) => {
-        if (!window.setEffect || !window.applyEffect) return;
+        if (!window.setEffect) return;
         window.setEffect(event.target.value);
-        window.applyEffect();
       });
 
       applyButton.addEventListener('click', () => {
