@@ -27,6 +27,75 @@ class AfterImage {
       }
     }
   }
+
+  getAverageColor() {
+    let avg = new Array(3).fill(0);
+
+    for (let i = 0; i < this.w; i++) {
+      for (let j = 0; j < this.h; j++) {
+        let pixel = this.pixels[i][j];
+        avg[0] += pixel[0];
+        avg[1] += pixel[1];
+        avg[2] += pixel[2];
+      }
+    }
+
+    let pixelCount = this.w * this.h;
+    avg = avg.map(total => round(total / pixelCount));
+    return avg;
+  }
+
+  averageDifferential(exp) {
+    let total = new Array(3).fill(0);
+
+    for (let i = 0; i < this.w; i++) {
+      for (let j = 0; j < this.h; j++) {
+        total = total.map((num, colIndex) => num + this.pixels[i][j][colIndex]);
+      }
+    }
+
+    let area = this.w * this.h;
+    let avg = total.map(num => num / area);
+
+    for (let i = 0; i < this.w; i++) {
+      for (let j = 0; j < this.h; j++) {
+        let pixel = this.pixels[i][j];
+        let r = Math.pow(Math.abs(pixel[0] - avg[0]), exp);
+        let g = Math.pow(Math.abs(pixel[1] - avg[1]), exp);
+        let b = Math.pow(Math.abs(pixel[2] - avg[2]), exp);
+        this.pixels[i][j][0] = r;
+        this.pixels[i][j][1] = g;
+        this.pixels[i][j][2] = b;
+      }
+    }
+  }
+
+  colorOverlay(col) {
+    for (let i = 0; i < this.w; i++) {
+      for (let j = 0; j < this.h; j++) {
+        let r = this.pixels[i][j][0];
+        let g = this.pixels[i][j][1];
+        let b = this.pixels[i][j][2];
+        this.pixels[i][j][0] = r + col[0];
+        this.pixels[i][j][1] = g + col[1];
+        this.pixels[i][j][2] = b + col[2];
+      }
+    }
+  }
+
+  onlyShowBright(threshold) {
+    for (let i = 0; i < this.w; i++) {
+      for (let j = 0; j < this.h; j++) {
+        for (let col = 0; col < 3; col++) {
+          if (this.pixels[i][j][col] > threshold) {
+            this.pixels[i][j][col] = 255;
+          } else {
+            this.pixels[i][j][col] = 0;
+          }
+        }
+      }
+    }
+  }
   
   roundColors(place) {
     for (let i = 0; i < this.w; i++) {
