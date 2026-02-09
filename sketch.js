@@ -74,9 +74,17 @@ function initializeFromImage() {
   // Draw original on the left
   image(img, originalRect.x, originalRect.y, originalRect.w, originalRect.h);
 
-  // Prepare AfterImage to render into the right half
+  // Prepare AfterImage to render into the right half, sampling from the original area
   colorArray = make2dArray(displayW, displayH);
-  afterImage = new AfterImage(colorArray, processedRect.x, processedRect.y, displayW, displayH);
+  afterImage = new AfterImage(
+    colorArray,
+    processedRect.x,
+    processedRect.y,
+    displayW,
+    displayH,
+    originalRect.x,
+    originalRect.y
+  );
   afterImage.copyImage();
 }
 

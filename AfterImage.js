@@ -1,9 +1,12 @@
 class AfterImage {
-  constructor(pixels, x, y, w, h) {
+  constructor(pixels, x, y, w, h, sourceX = 0, sourceY = 0) {
     this.pixels = pixels;
     this.pos = createVector(x, y);
     this.w = w;
     this.h = h;
+    // Where to sample pixels from on the canvas
+    this.sourceX = sourceX;
+    this.sourceY = sourceY;
   }
 
   render() {
@@ -17,9 +20,10 @@ class AfterImage {
   }
 
   copyImage() {
+    const ctx = canvas.getContext('2d');
     for (let i = 0; i < this.w; i++) {
       for (let j = 0; j < this.h; j++) {
-        this.pixels[i][j] = canvas.getContext('2d').getImageData(i, j, 1, 1).data;
+        this.pixels[i][j] = ctx.getImageData(this.sourceX + i, this.sourceY + j, 1, 1).data;
       }
     }
   }
