@@ -1,22 +1,15 @@
-let img;
+let img = null;
 let colorArray;
 let afterImage;
 let currentEffect = 'invert';
 let canvasOrigin = { x: 0, y: 0, w: 0, h: 0 };
-
-function preload() {
-  // Load a default image so the app has something to show before upload
-  img = loadImage('assets/pic.jpeg');
-}
 
 function setup() {
   const cnv = createCanvas(window.innerWidth, window.innerHeight);
   cnv.parent(document.querySelector('.canvas-wrapper'));
   pixelDensity(1);
 
-  if (img) {
-    initializeFromImage();
-  }
+  background(3, 6, 24);
 
   // Expose hooks for the UI
   window.setEffect = (effect) => {
@@ -113,7 +106,15 @@ function applyCurrentEffect() {
 }
 
 function draw() {
-  // No continuous animation needed for now
+  if (!img) {
+    push();
+    noStroke();
+    fill(148, 163, 184);
+    textAlign(CENTER, CENTER);
+    textSize(16);
+    text('Upload an image to begin experimenting with effects.', width / 2, height / 2);
+    pop();
+  }
 }
 
 const make2dArray = (rows, cols) => {
